@@ -101,12 +101,39 @@ public class MassList {
 
 	private static Collection<Mass> importWeights() {
 		ArrayList<Mass> weightList = new ArrayList<Mass>();
-//
-//		weightList.add(new Mass("Lightship", MassCategory.LIGHTSHIP, 6986.2,61.07,0.77,10.08,0.0));
-//		weightList.add(new Mass("Cargo", MassCategory.CARGO, 7588.0, 72.798,-0.603,11.639,68.7));
-//		weightList.add(new Mass("Stores", MassCategory.STORE, 604.3, 77.4,0.51,8.91,0.0));
-		
+		//fill tanks with loadcase data
+				
+		// load lightShip Weight
+				ShipData shipDataObject =ShipData.getInstance();
+				shipDataObject.getLightshipList().forEach(weight->weightList.add(createMass(weight)));
+			
+		//load other weights from Load Case
+				LoadCaseData loadCaseData=LoadCaseData.getInstance();
+				loadCaseData.getWeightList().forEach(weight->weightList.add(createMass(weight)));
+				
 		return weightList;
+	}
+
+	private static Mass createMass(Map<String, Object> weight) {
+		String id=(String) weight.get("id");
+		double xa = ((BigDecimal) weight.get("xa")).doubleValue();
+		double xf = ((BigDecimal) weight.get("xf")).doubleValue();
+		
+		MassCategory category= switch ((String)weight.get("type")) {
+			case "fuel"-> MassCategory.HFOTANK;
+			case "ballast"-> MassCategory.BALLASTTANK;
+			case "luboil" -> MassCategory.LUBTANK;
+			case "holdwater"->MassCategory.HOLDWATER;			
+			default -> null;
+		};
+		
+		double mass=((BigDecimal) weight.get("mass")).doubleValue();
+		double x=((BigDecimal) weight.get("lcg")).doubleValue();
+		double y=((BigDecimal) weight.get("tcg")).doubleValue();
+		double z=((BigDecimal) weight.get("vcg")).doubleValue();
+		double fsm=((BigDecimal) weight.get("fsm")).doubleValue();
+			
+		return new Mass(id,category,mass,x,y,z,fsm,xa,xf);
 	}
 
 	/* Returns an observable list of masses */

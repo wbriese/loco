@@ -95,7 +95,7 @@ public class Hydrostatic implements ListChangeListener<Mass>  {
 		
 		sumFSM.set(massList.stream().map(mass->mass.getFsm()).reduce( 0.0, (r,e)->r+e));
 				
-		hydrostaticValues=hydrostaticTables.interpolate(new BigDecimal(0), new BigDecimal(displacement.get())); // to do
+		hydrostaticValues=hydrostaticTables.interpolate(0, displacement.get()); // to do
 
 		
 		bg=lcg-hydrostaticValues.get("LCB").doubleValue();
@@ -103,7 +103,7 @@ public class Hydrostatic implements ListChangeListener<Mass>  {
 		trim.set(bg*displacement.get()/hydrostaticValues.get("MCT").doubleValue()/100.0);
 
 		
-		hydrostaticValues=hydrostaticTables.interpolate(new BigDecimal(trim.get()), new BigDecimal(displacement.get())); // to do
+		hydrostaticValues=hydrostaticTables.interpolate(trim.get(), displacement.get()); // to do
 
 		
 		

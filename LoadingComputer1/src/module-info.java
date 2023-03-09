@@ -5,8 +5,8 @@ requires javafx.fxml;
 requires javafx.base;
 requires javafx.graphics;
 requires java.logging;
-requires json.simple;
 requires java.base;
+requires json.simple;
 
 opens application to javafx.graphics, javafx.fxml, javafx.base; 
 

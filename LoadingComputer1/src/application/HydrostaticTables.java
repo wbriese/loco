@@ -37,16 +37,16 @@ public class HydrostaticTables {
 				
 			}
 	
-public  Map<String,BigDecimal> interpolate( BigDecimal trim, BigDecimal disp) {
+public  Map<String,BigDecimal> interpolate( double trim, double disp) {
 		
 		// Find the hydrostatic tables for the trim values above (TrimCeiling) and below (trimFloor) requested trim
-		Map<String,Object> floorTrimTable= (Map<String, Object>) hydrostatics.floor(Map.of("trim", trim));
-		Map<String,Object> ceilingTrimTable= (Map<String, Object>) hydrostatics.ceiling(Map.of("trim", trim));
+		Map<String,Object> floorTrimTable= (Map<String, Object>) hydrostatics.floor(Map.of("trim", new BigDecimal(trim)));
+		Map<String,Object> ceilingTrimTable= (Map<String, Object>) hydrostatics.ceiling(Map.of("trim", new BigDecimal(trim)));
 		
 		// calculate the linear factor p= (trim-TRIMfloor)/(TRIMceiling-TRIMfloor) between the 2 tabular trim values
 		BigDecimal trimFrac;
 		if (floorTrimTable.equals(ceilingTrimTable)) trimFrac=new BigDecimal(0);
-		else trimFrac= trim.subtract((BigDecimal)floorTrimTable.get("trim")).multiply(new BigDecimal(1000)).divide(((BigDecimal)ceilingTrimTable.get("trim")).subtract(((BigDecimal)floorTrimTable.get("trim"))),RoundingMode.HALF_EVEN).divide(new BigDecimal(1000));
+		else trimFrac= new BigDecimal((trim-((BigDecimal)floorTrimTable.get("trim")).doubleValue())/(((BigDecimal)ceilingTrimTable.get("trim")).doubleValue()-((BigDecimal)floorTrimTable.get("trim")).doubleValue()));
 	
 		
 		//calculate hydrostatic and GZ values for the highest trim below the requested trim
@@ -64,18 +64,21 @@ public  Map<String,BigDecimal> interpolate( BigDecimal trim, BigDecimal disp) {
 	}
 
 	
-	private  Map<String,BigDecimal> interpolateDisplacement (ArrayList<Map<String, BigDecimal>> table,BigDecimal disp) {
+	private  Map<String,BigDecimal> interpolateDisplacement (ArrayList<Map<String, BigDecimal>> table,double disp) {
 		
 		NavigableSet<Map<String,BigDecimal>> sortedTable= new TreeSet<Map<String,BigDecimal>>(dispComparator);
 		sortedTable.addAll(table);
 		
 		//Get the  hydrostatic values closest to requested Displacement
-		Map<String,BigDecimal> FloorDisp = sortedTable.floor(Map.of("disp",disp));	
-		Map<String,BigDecimal> CeilingDisp = sortedTable.ceiling(Map.of("disp",disp));	
+		Map<String,BigDecimal> FloorDisp = sortedTable.floor(Map.of("disp",new BigDecimal(disp)));	
+		Map<String,BigDecimal> CeilingDisp = sortedTable.ceiling(Map.of("disp",new BigDecimal(disp)));	
 
+		System.out.println("disp"+disp);
+		System.out.println("FloorDisp"+FloorDisp);
+		
 		BigDecimal DispFrac;
 		if (FloorDisp.equals(CeilingDisp)) DispFrac=new BigDecimal(0);
-		else DispFrac=disp.subtract((BigDecimal)FloorDisp.get("disp")).multiply(new BigDecimal(1000)).divide(((BigDecimal)CeilingDisp.get("disp")).subtract(((BigDecimal)FloorDisp.get("disp"))),RoundingMode.HALF_EVEN).divide(new BigDecimal(1000));
+		else DispFrac=new BigDecimal((disp-((BigDecimal)FloorDisp.get("disp")).doubleValue())/(((BigDecimal)CeilingDisp.get("disp")).doubleValue()-((BigDecimal)FloorDisp.get("disp")).doubleValue()));
 										
 		//calculate the Displacement-interpolated hydrostatic values 
 		Map<String,BigDecimal> interpolatedValues=FloorDisp.entrySet().stream().collect(Collectors.toMap(el->el.getKey(),el->el.getValue().add(DispFrac.multiply(CeilingDisp.get(el.getKey()).subtract(el.getValue())))));
