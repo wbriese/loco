@@ -101,6 +101,7 @@ public class MassList {
 
 	private static Collection<Mass> importWeights() {
 		ArrayList<Mass> weightList = new ArrayList<Mass>();
+//
 //		weightList.add(new Mass("Lightship", MassCategory.LIGHTSHIP, 6986.2,61.07,0.77,10.08,0.0));
 //		weightList.add(new Mass("Cargo", MassCategory.CARGO, 7588.0, 72.798,-0.603,11.639,68.7));
 //		weightList.add(new Mass("Stores", MassCategory.STORE, 604.3, 77.4,0.51,8.91,0.0));
