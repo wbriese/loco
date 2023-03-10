@@ -55,7 +55,7 @@ public  Map<String,BigDecimal> interpolate( double trim, double disp) {
 		floorTrimInterpolated.putAll(interpolateDisplacement ((ArrayList<Map<String, BigDecimal>>) floorTrimTable.get("crosscurves"),disp));
 		
 		//calculate hydrostatic and GZ values for the lowest trim above the requested trim
-		Map<String,BigDecimal> ceilingTrimInterpolated;
+		 Map<String,BigDecimal> ceilingTrimInterpolated;
 		ceilingTrimInterpolated=interpolateDisplacement ((ArrayList<Map<String, BigDecimal>>) ceilingTrimTable.get("hydrovalues"),disp);
 		ceilingTrimInterpolated.putAll(interpolateDisplacement ((ArrayList<Map<String, BigDecimal>>) ceilingTrimTable.get("crosscurves"),disp));
 				
