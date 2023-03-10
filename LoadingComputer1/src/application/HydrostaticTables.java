@@ -66,7 +66,7 @@ public  Map<String,BigDecimal> interpolate( double trim, double disp) {
 	
 	private  Map<String,BigDecimal> interpolateDisplacement (ArrayList<Map<String, BigDecimal>> table,double disp) {
 		
-		NavigableSet<Map<String,BigDecimal>> sortedTable= new TreeSet<Map<String,BigDecimal>>(dispComparator);
+		 NavigableSet<Map<String,BigDecimal>> sortedTable= new TreeSet<Map<String,BigDecimal>>(dispComparator);
 		sortedTable.addAll(table);
 		
 		//Get the  hydrostatic values closest to requested Displacement
