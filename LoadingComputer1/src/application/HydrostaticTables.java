@@ -76,7 +76,7 @@ public  Map<String,BigDecimal> interpolate( double trim, double disp) {
 		System.out.println("disp"+disp);
 		System.out.println("FloorDisp"+FloorDisp);
 		
-		BigDecimal DispFrac;
+		 BigDecimal DispFrac;
 		if (FloorDisp.equals(CeilingDisp)) DispFrac=new BigDecimal(0);
 		else DispFrac=new BigDecimal((disp-((BigDecimal)FloorDisp.get("disp")).doubleValue())/(((BigDecimal)CeilingDisp.get("disp")).doubleValue()-((BigDecimal)FloorDisp.get("disp")).doubleValue()));
 										
