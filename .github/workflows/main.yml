@@ -6,7 +6,6 @@ name: Publish Github Release with jDeploy
 on:
   push:
   #  tags: '*'
-
 jobs:
   build:
 
